@@ -5,7 +5,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/aboutaba715-design/devsecops-project.git'
+           git branch: 'main', url: 'git@github.com:aboutaba715-design/devsecops-project.git'
             }
         }
 
