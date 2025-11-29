@@ -32,5 +32,11 @@ pipeline {
                 sh 'docker run -d -p 8089:80 devsecops-app'
             }
         }
+        stage('Tests') {
+    steps {
+        sh 'pytest'  // Exécute pytest pour lancer tes tests
+    }
+}
+
     }
 }
