@@ -37,7 +37,7 @@ pipeline {
             steps {
                 sh '''
                 # Télécharger et exécuter OWASP Dependency-Check
-                wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v8.5.1/dependency-check-8.5.1-release.zip -O dependency-check.zip
+                wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
                 unzip -q dependency-check.zip -d dependency-check
                 ./dependency-check/dependency-check.sh --scan . --format HTML --out reports || true
                 '''
