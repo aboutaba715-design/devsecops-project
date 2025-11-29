@@ -29,7 +29,7 @@ pipeline {
 
         stage('Run Docker Container') {
             steps {
-                sh 'docker run -d -p 8080:80 devsecops-app'
+                sh 'docker run -d -p 8089:80 devsecops-app'
             }
         }
     }
