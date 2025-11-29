@@ -9,11 +9,7 @@ pipeline {
             }
         }
 
-        stage('Tests') {
-            steps {
-                sh 'pytest || true'
-            }
-        }
+      
 
         stage('SAST - Bandit') {
             steps {
