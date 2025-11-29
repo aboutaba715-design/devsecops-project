@@ -1,8 +1,8 @@
-
 pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'git@github.com:aboutaba715-design/devsecops-project.git'
@@ -29,16 +29,16 @@ pipeline {
 
         stage('Tests') {
             steps {
-                sh 'pytest'  // Exécute pytest pour lancer tes tests
+                sh 'pytest'
             }
         }
 
         stage('Dependency Scan - OWASP') {
             steps {
                 sh '''
-                # Télécharger et exécuter OWASP Dependency-Check
                 wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
                 unzip -q dependency-check.zip -d dependency-check
+                ls -la dependency-check/dependency-check/bin  # Vérifier que le script est bien là
                 ./dependency-check/dependency-check.sh --scan . --format HTML --out reports || true
                 '''
             }
@@ -47,11 +47,13 @@ pipeline {
         stage('DAST - OWASP ZAP') {
             steps {
                 sh '''
+             
                 docker pull owasp/zap2docker-stable
-                docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:8080 -r zap_report.html || true
+                docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:8089 -r zap_report.html || true
                 '''
             }
         }
+
     }
 
     post {
