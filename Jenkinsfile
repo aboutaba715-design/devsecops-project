@@ -1,15 +1,13 @@
+
 pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
-           git branch: 'main', url: 'git@github.com:aboutaba715-design/devsecops-project.git'
+                git branch: 'main', url: 'git@github.com:aboutaba715-design/devsecops-project.git'
             }
         }
-
-      
 
         stage('SAST - Bandit') {
             steps {
@@ -28,11 +26,14 @@ pipeline {
                 sh 'docker run -d -p 8089:80 devsecops-app'
             }
         }
+
         stage('Tests') {
-    steps {
-        sh 'pytest'  // Exécute pytest pour lancer tes tests
-    }
-}    stage('Dependency Scan - OWASP') {
+            steps {
+                sh 'pytest'  // Exécute pytest pour lancer tes tests
+            }
+        }
+
+        stage('Dependency Scan - OWASP') {
             steps {
                 sh '''
                 # Télécharger et exécuter OWASP Dependency-Check
@@ -41,7 +42,9 @@ pipeline {
                 ./dependency-check/dependency-check.sh --scan . --format HTML --out reports || true
                 '''
             }
-                  stage('DAST - OWASP ZAP') {
+        }
+
+        stage('DAST - OWASP ZAP') {
             steps {
                 sh '''
                 docker pull owasp/zap2docker-stable
@@ -56,9 +59,5 @@ pipeline {
             archiveArtifacts artifacts: 'reports/*.html,zap_report.html', allowEmptyArchive: true
             cleanWs()
         }
-    }
-        }
-        
-
     }
 }
