@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -38,8 +39,8 @@ pipeline {
                 sh '''
                 wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
                 unzip -q dependency-check.zip -d dependency-check
-                ls -la dependency-check/dependency-check/bin  # Vérifier que le script est bien là
-                ./dependency-check/dependency-check.sh --scan . --format HTML --out reports || true
+                ls -la dependency-check/bin
+                ./dependency-check/bin/dependency-check.sh --scan . --format HTML --out reports || true
                 '''
             }
         }
@@ -47,9 +48,9 @@ pipeline {
         stage('DAST - OWASP ZAP') {
             steps {
                 sh '''
-             
-                docker pull owasp/zap2docker-stable
-                docker run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:8089 -r zap_report.html || true
+                # Si l'image publique n'est pas accessible, utiliser la version weekly
+                docker pull owasp/zap2docker-weekly
+                docker run -t owasp/zap2docker-weekly zap-baseline.py -t http://localhost:8089 -r zap_report.html || true
                 '''
             }
         }
