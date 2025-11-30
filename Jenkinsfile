@@ -35,15 +35,26 @@ pipeline {
         }
 
         stage('Dependency Scan - OWASP') {
-            steps {
-                sh '''
-                wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
-                unzip -q dependency-check.zip -d dependency-check
-                ls -la dependency-check/bin
-                ./dependency-check/bin/dependency-check.sh --scan . --format HTML --out reports || true
-                '''
-            }
-        }
+    steps {
+        sh '''
+        # Télécharger Dependency-Check
+        wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
+
+        # Décompressser
+        unzip -q dependency-check.zip -d dependency-check
+
+        # Vérifier ce qu'il y a réellement dans le zip
+        echo "=== CONTENTS ==="
+        ls -R dependency-check
+
+        # Donner les droits d'exécution
+        chmod +x dependency-check/bin/dependency-check
+
+        # Exécuter le scan
+        dependency-check/bin/dependency-check --scan . --format HTML --out reports || true
+        '''
+    }
+}
 
         stage('DAST - OWASP ZAP') {
             steps {
