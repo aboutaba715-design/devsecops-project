@@ -34,29 +34,28 @@ pipeline {
             }
         }
 
-        stage('Dependency Scan - OWASP') {
-            steps {
-                sh '''
-                # Télécharger Dependency-Check
-                wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
+       stage('Dependency Scan - OWASP') {
+    steps {
+        sh '''
+        # Télécharger Dependency-Check
+        wget -q https://github.com/jeremylong/DependencyCheck/releases/download/v12.1.0/dependency-check-12.1.0-release.zip -O dependency-check.zip
 
-                # Décompresser
-                unzip -q dependency-check.zip -d dependency-check
+        # Décompresser
+        unzip -q dependency-check.zip -d dependency-check
 
-                # Vérifier le contenu
-                echo "=== CONTENTS ==="
-                ls -R dependency-check
+        # Vérifier le contenu
+        echo "=== CONTENTS ==="
+        ls -R dependency-check
 
-                # Donner la permission d'exécution
-                chmod +x dependency-check/dependency-check/dependency-check.sh
+        # Donner la permission d'exécution au script correct
+        chmod +x dependency-check/dependency-check/bin/dependency-check.sh
 
-                # Lancer le scan
-                dependency-check/dependency-check/dependency-check.sh --scan . --format HTML --out reports || true
-                '''
-            }
-        }
-
-    } // <-- fermeture du bloc stages
+        # Lancer le scan
+        dependency-check/dependency-check/bin/dependency-check.sh --scan . --format HTML --out reports || true
+        '''
+    }
+}
+// <-- fermeture du bloc stages
 
     post {
         always {
