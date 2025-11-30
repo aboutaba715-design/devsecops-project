@@ -56,17 +56,18 @@ dependency-check/dependency-check/bin/dependency-check.sh \
     }
 }
 
-        stage('DAST - OWASP ZAP') {
-            steps {
-                sh '''
-                # Si l'image publique n'est pas accessible, utiliser la version weekly
-                docker pull owasp/zap2docker-weekly
-                docker run -t owasp/zap2docker-weekly zap-baseline.py -t http://localhost:8089 -r zap_report.html || true
-                '''
-            }
-        }
+  stage('DAST - OWASP ZAP') {
+    steps {
+        sh '''
+        docker pull ghcr.io/zaproxy/zaproxy:stable
 
+        docker run --rm \
+          -v $(pwd):/zap/wrk \
+          ghcr.io/zaproxy/zaproxy:stable \
+          zap-baseline.py -t http://localhost:8089 -r zap_report.html || true
+        '''
     }
+}
 
     post {
         always {
