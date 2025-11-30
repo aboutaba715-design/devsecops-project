@@ -47,11 +47,11 @@ pipeline {
         echo "=== CONTENTS ==="
         ls -R dependency-check
 
-        # Donner les droits d'exécution
-        chmod +x dependency-check/bin/dependency-check
+  chmod +x dependency-check/dependency-check/bin/dependency-check.sh
 
-        # Exécuter le scan
-        dependency-check/bin/dependency-check --scan . --format HTML --out reports || true
+# Lancer le scan
+dependency-check/dependency-check/bin/dependency-check.sh \
+    --scan . --format HTML --out reports || true
         '''
     }
 }
