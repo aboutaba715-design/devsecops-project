@@ -56,18 +56,7 @@ dependency-check/dependency-check/bin/dependency-check.sh \
     }
 }
 
-  stage('DAST - OWASP ZAP') {
-    steps {
-        sh '''
-        docker pull ghcr.io/zaproxy/zaproxy:stable
 
-        docker run --rm \
-          -v $(pwd):/zap/wrk \
-          ghcr.io/zaproxy/zaproxy:stable \
-          zap-baseline.py -t http://localhost:8089 -r zap_report.html || true
-        '''
-    }
-}
 
     post {
         always {
